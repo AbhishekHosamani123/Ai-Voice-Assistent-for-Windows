@@ -38,41 +38,34 @@ const PREMIUM_VOICES: { id: string; name: string; style: string }[] = [
 
 function VoiceGallery() {
   return (
-    <section className="gallery">
+    <section className="gallery" id="voice-gallery">
       <h2>Premium Voice Gallery</h2>
       <p className="gallery-note">
         Your agent ships with free voices today. With an ElevenLabs paid
         subscription, these premium Kannada (and 20+ more languages) voices
-        unlock instantly — no code changes, one config line. Click{" "}
-        <strong>Listen</strong> to preview any voice.
+        unlock instantly — no code changes, one config line. Press play to
+        hear each voice right here.
       </p>
       <div className="voice-grid">
         {PREMIUM_VOICES.map((v) => (
-          <a
-            key={v.id}
-            className="voice-card"
-            href={`https://elevenlabs.io/voices/${v.id}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <div key={v.id} className="voice-card">
             <span className="voice-name">{v.name}</span>
             <span className="voice-style">{v.style}</span>
             <span className="voice-tag">Kannada +</span>
-            <span className="voice-link">Listen on ElevenLabs →</span>
-          </a>
+            <audio
+              className="voice-audio"
+              controls
+              preload="none"
+              src={`/voices/${v.id}.mp3`}
+            />
+          </div>
         ))}
-        <a
-          className="voice-card more"
-          href="https://elevenlabs.io/app/voice-library"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <div className="voice-card more">
           <span className="voice-name">Many more…</span>
           <span className="voice-style">
             10,000+ community voices in 32 languages
           </span>
-          <span className="voice-link">Browse the Voice Library →</span>
-        </a>
+        </div>
       </div>
     </section>
   );
@@ -142,6 +135,9 @@ export default function Home() {
           <button className="cta" onClick={connect} disabled={connecting}>
             {connecting ? "Connecting..." : "Start conversation"}
           </button>
+          <a className="ghost nav-btn" href="#voice-gallery">
+            ▶ Hear voice samples
+          </a>
           {error && <p className="error">{error}</p>}
           <p className="note">
             Requires the backend agent worker and token server to be running.
