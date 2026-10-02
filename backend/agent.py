@@ -65,6 +65,10 @@ server = AgentServer(
     #   job gracefully instead of OOM-killing the whole instance
     num_idle_processes=0,
     job_memory_limit_mb=380,
+    # Tiny free-tier CPUs spike past the default 0.7 load threshold while
+    # spawning a session process, which makes the worker briefly refuse new
+    # sessions. Keep it available except under genuinely sustained load.
+    load_threshold=0.95,
 )
 
 
