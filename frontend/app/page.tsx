@@ -22,12 +22,12 @@ type TokenResponse = {
 };
 
 // ── Your personal links ──────────────────────────────────────────────
-// Replace the placeholder "#" values with your real URLs before sharing.
 const LINKS = {
-  portfolio: "#", // e.g. "https://abhishek.dev"
-  linkedin: "#", // e.g. "https://linkedin.com/in/abhishek-hosamani"
-  instagram: "#", // e.g. "https://instagram.com/yourhandle"
-  whatsapp: "#", // e.g. "https://wa.me/919876543210"
+  portfolio: "https://portfolio-website-nu-five-23.vercel.app/",
+  linkedin: "https://www.linkedin.com/in/abhishek-hosamani/",
+  instagram: "https://www.instagram.com/abhishek_hosamani___/?hl=en",
+  whatsapp: "https://wa.me/918431406956",
+  email: "mailto:abhishekhosamani522@gmail.com",
 };
 
 const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
@@ -68,6 +68,16 @@ const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M12.04 2a9.9 9.9 0 0 0-8.5 15.02L2 22l5.12-1.5A9.94 9.94 0 1 0 12.04 2zm0 1.8a8.1 8.1 0 1 1-4.1 15.1l-.3-.17-3.03.89.9-2.95-.2-.31a8.1 8.1 0 0 1 6.73-12.56zm-3.1 4.06c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.23.9 2.42 1.03 2.59.12.16 1.75 2.8 4.36 3.81 2.14.83 2.58.67 3.05.63.46-.04 1.5-.61 1.71-1.2.21-.6.21-1.11.15-1.21-.06-.11-.23-.17-.48-.29-.25-.13-1.5-.74-1.73-.83-.23-.08-.4-.12-.56.13-.17.25-.65.83-.8 1-.14.16-.29.19-.54.06-.25-.12-1.06-.39-2.02-1.25-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.39.11-.51.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.09-.16.04-.31-.02-.44-.06-.12-.56-1.37-.77-1.87-.2-.49-.4-.42-.56-.43h-.48z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Email",
+    href: LINKS.email,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
       </svg>
     ),
   },
