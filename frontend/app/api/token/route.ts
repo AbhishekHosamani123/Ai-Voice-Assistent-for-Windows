@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
-import { AccessToken } from "livekit-server-sdk";
+import {
+  AccessToken,
+  RoomAgentDispatch,
+  RoomConfiguration,
+} from "livekit-server-sdk";
 
 // Server-side token issuer. Secrets live in environment variables:
 //   LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET
-// Locally: backend/.env.local values; on Vercel: Project Settings -> Environment Variables.
+// Locally: frontend/.env.local; on Vercel: Project Settings -> Environment Variables.
+const AGENT_NAME = process.env.AGENT_NAME ?? "voice-agent";
+
 export async function POST() {
   const url = process.env.LIVEKIT_URL;
   const apiKey = process.env.LIVEKIT_API_KEY;
@@ -26,6 +32,11 @@ export async function POST() {
     canPublish: true,
     canSubscribe: true,
     canPublishData: true,
+  });
+
+  // Ask LiveKit to dispatch our agent worker into this room.
+  token.roomConfig = new RoomConfiguration({
+    agents: [new RoomAgentDispatch({ agentName: AGENT_NAME })],
   });
 
   return NextResponse.json({

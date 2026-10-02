@@ -92,7 +92,7 @@ def get_config() -> Config:
     missing = []
     if not config.groq_api_key:
         missing.append("GROQ_API_KEY")
-    if not config.elevenlabs_api_key:
+    if config.tts_provider == "elevenlabs" and not config.elevenlabs_api_key:
         missing.append("ELEVENLABS_API_KEY")
     if not config.livekit_url:
         missing.append("LIVEKIT_URL")
