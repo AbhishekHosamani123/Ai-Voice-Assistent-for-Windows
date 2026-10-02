@@ -57,7 +57,15 @@ class Assistant(Agent):
         super().__init__(instructions=system_prompt)
 
 
-server = AgentServer()
+server = AgentServer(
+    # Memory-constrained hosting (e.g. Render free tier, 512 MB):
+    # - no pre-spawned idle plugin processes (each imports every plugin and
+    #   roughly doubles baseline memory; jobs spawn on demand instead)
+    # - cap each session's job process so a runaway session shuts down that
+    #   job gracefully instead of OOM-killing the whole instance
+    num_idle_processes=0,
+    job_memory_limit_mb=380,
+)
 
 
 @server.rtc_session(agent_name=os.getenv("AGENT_NAME", "voice-agent"))

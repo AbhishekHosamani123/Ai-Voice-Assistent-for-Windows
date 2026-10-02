@@ -8,6 +8,11 @@ TTS_PROVIDER env var chooses the engine:
     (canopylabs/orpheus-v1-english). Fallback while ElevenLabs is on the
     free tier; also a zero-extra-key option since the Groq key is required
     for STT/LLM anyway.
+  - "edge": Microsoft Edge neural voices (free, streaming) — used for
+    Kannada and Indian-accent English.
+
+Plugin imports are lazy: only the selected provider's plugin is imported,
+which keeps the worker's memory footprint small (matters on 512 MB hosts).
 
 Defaults used by the ElevenLabs plugin when not overridden:
   - model: "eleven_turbo_v2_5" (low-latency, conversational)
@@ -18,13 +23,14 @@ Defaults used by the ElevenLabs plugin when not overridden:
 from __future__ import annotations
 
 from livekit.agents import tts
-from livekit.plugins import elevenlabs, openai
 
 from config import Config
 from services.tts_edge import EdgeTTS
 
 
-def _build_elevenlabs(config: Config) -> elevenlabs.TTS:
+def _build_elevenlabs(config: Config) -> tts.TTS:
+    from livekit.plugins import elevenlabs
+
     kwargs: dict = {
         "model": config.elevenlabs_model_id,
         "api_key": config.elevenlabs_api_key,
@@ -37,7 +43,9 @@ def _build_elevenlabs(config: Config) -> elevenlabs.TTS:
     return elevenlabs.TTS(**kwargs)
 
 
-def _build_groq(config: Config) -> openai.TTS:
+def _build_groq(config: Config) -> tts.TTS:
+    from livekit.plugins import openai
+
     return openai.TTS(
         model=config.groq_tts_model,
         voice=config.groq_tts_voice,
