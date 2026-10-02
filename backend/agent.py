@@ -27,7 +27,7 @@ from livekit.agents import (
 from livekit.plugins import silero
 
 from config import get_config
-from prompts import GREETING_INSTRUCTIONS, SYSTEM_PROMPT
+from prompts import get_greeting_instructions, get_system_prompt
 from services.llm import build_llm
 from services.stt import build_stt
 from services.tts import build_tts
@@ -53,8 +53,8 @@ async def _get_vad():
 
 
 class Assistant(Agent):
-    def __init__(self) -> None:
-        super().__init__(instructions=SYSTEM_PROMPT)
+    def __init__(self, system_prompt: str) -> None:
+        super().__init__(instructions=system_prompt)
 
 
 server = AgentServer()
@@ -80,6 +80,9 @@ async def entrypoint(ctx: JobContext):
             # Start generating the LLM response as soon as VAD sees the user
             # finish a turn, instead of waiting for extra silence padding.
             preemptive_generation={"enabled": True},
+            # Default 0.5s silence before the turn is finalized; 0.25s cuts
+            # ~250ms off every response without frequent false turn-ends.
+            min_endpointing_delay=0.25,
         ),
     )
 
@@ -90,15 +93,22 @@ async def entrypoint(ctx: JobContext):
     def _on_close(event):
         logger.info("[VOICE] Session closed: %s", getattr(event, "reason", "unknown"))
 
-    await session.start(room=ctx.room, agent=Assistant())
+    await session.start(room=ctx.room, agent=Assistant(get_system_prompt(config.agent_language)))
 
     # Join the room and connect to the user
     await ctx.connect()
 
-    logger.info("[VOICE] Agent connected to room %s", ctx.room.name)
+    logger.info(
+        "[VOICE] Agent connected to room %s (language=%s, tts=%s)",
+        ctx.room.name,
+        config.agent_language,
+        config.tts_provider,
+    )
 
     try:
-        await session.generate_reply(instructions=GREETING_INSTRUCTIONS)
+        await session.generate_reply(
+            instructions=get_greeting_instructions(config.agent_language)
+        )
     except Exception:
         logger.exception("Greeting failed, session continues listening")
 

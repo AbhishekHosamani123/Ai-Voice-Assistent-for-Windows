@@ -30,10 +30,14 @@ class Config:
     elevenlabs_voice_id: str
     elevenlabs_model_id: str
 
-    # TTS provider selection: "elevenlabs" (default) or "groq" (fallback)
+    # TTS provider selection: "elevenlabs" (default), "edge", or "groq"
     tts_provider: str
+    edge_tts_voice: str
     groq_tts_model: str
     groq_tts_voice: str
+
+    # Agent conversation language: "en" or "kn" (Kannada)
+    agent_language: str
 
     # LiveKit
     livekit_url: str
@@ -67,8 +71,10 @@ def get_config() -> Config:
         elevenlabs_voice_id=_env("ELEVENLABS_VOICE_ID"),
         elevenlabs_model_id=_env("ELEVENLABS_MODEL_ID", "eleven_turbo_v2_5"),
         tts_provider=_env("TTS_PROVIDER", "elevenlabs").lower(),
+        edge_tts_voice=_env("EDGE_TTS_VOICE", "kn-IN-SapnaNeural"),
         groq_tts_model=_env("GROQ_TTS_MODEL", "canopylabs/orpheus-v1-english"),
         groq_tts_voice=_env("GROQ_TTS_VOICE", "tara"),
+        agent_language=_env("AGENT_LANGUAGE", "en").lower(),
         livekit_url=_env("LIVEKIT_URL"),
         livekit_api_key=_env("LIVEKIT_API_KEY"),
         livekit_api_secret=_env("LIVEKIT_API_SECRET"),

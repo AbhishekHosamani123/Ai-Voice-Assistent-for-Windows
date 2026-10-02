@@ -28,4 +28,8 @@ probe.log
 Thumbs.db
 .idea/
 .vscode/
-"backend/*.mp3"  
+
+# Test artifacts / personal audio samples
+backend/test-output/
+voice_previews/
+backend/*.mp3

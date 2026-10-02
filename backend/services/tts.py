@@ -17,9 +17,11 @@ Defaults used by the ElevenLabs plugin when not overridden:
 
 from __future__ import annotations
 
+from livekit.agents import tts
 from livekit.plugins import elevenlabs, openai
 
 from config import Config
+from services.tts_edge import EdgeTTS
 
 
 def _build_elevenlabs(config: Config) -> elevenlabs.TTS:
@@ -45,7 +47,9 @@ def _build_groq(config: Config) -> openai.TTS:
     )
 
 
-def build_tts(config: Config) -> elevenlabs.TTS | openai.TTS:
+def build_tts(config: Config) -> tts.TTS:
     if config.tts_provider == "groq":
         return _build_groq(config)
+    if config.tts_provider == "edge":
+        return EdgeTTS(voice=config.edge_tts_voice)
     return _build_elevenlabs(config)

@@ -155,3 +155,80 @@ h1 {
   max-width: 420px;
   text-align: center;
 }
+
+.gallery {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.gallery h2 {
+  font-size: 1.4rem;
+  margin: 0 0 0.4rem;
+}
+
+.gallery-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0 0 1.4rem;
+  max-width: 640px;
+}
+
+.voice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.voice-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.voice-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.voice-card.more {
+  justify-content: center;
+  border-style: dashed;
+}
+
+.voice-name {
+  font-weight: 600;
+}
+
+.voice-style {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.voice-tag {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  margin-top: 0.2rem;
+}
+
+.voice-link {
+  color: var(--accent);
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
