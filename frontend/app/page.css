@@ -247,3 +247,29 @@ h1 {
 html {
   scroll-behavior: smooth;
 }
+
+.gallery-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.clone-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 520px;
+}
+
+.cta.small {
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+}

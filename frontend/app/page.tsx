@@ -22,19 +22,25 @@ type TokenResponse = {
 };
 
 const PREMIUM_VOICES: { id: string; name: string; style: string }[] = [
-  { id: "U1NKe3TWJM30c9skflQt", name: "Deepika", style: "Warm, Cheerful Ad" },
-  { id: "BR93uV16h7Ff1tjw4CiG", name: "Kriti L", style: "Fluent, Friendly & Natural" },
-  { id: "2SDH0owxS12R2YMgMNoG", name: "Aisiri", style: "Friendly Customer Care" },
-  { id: "wgYipW6i4oMTbU78GXhZ", name: "Kampana", style: "FM Radio Presenter" },
-  { id: "1yebI4wPatIbQgkzinlP", name: "Aisiri", style: "Warm Narration" },
-  { id: "MYdTqLsWF6IueSvcrO97", name: "Sangamitra", style: "Animated Narrator" },
-  { id: "rtcmOPBIMycbYDKGYA35", name: "Vallabhi S", style: "Warm & Natural Friend" },
-  { id: "7B4TkucyQHy3r9hvAnhg", name: "Sharadhi", style: "Natural Conversation" },
-  { id: "eESo8CL7VOqMtWCh1ikK", name: "Padhma", style: "Calm Audiobook" },
-  { id: "tUrpFt5bj8wFuWHqVIsg", name: "Kriti L", style: "Clear Audiobook Narrator" },
-  { id: "imphBib61OiJ8r9IfSGe", name: "Varalaxmi", style: "Natural Conversation" },
-  { id: "z5dCxveFRvWeqsaKgMqe", name: "Krishna Priya M", style: "Confident News Anchor" },
+  { id: "kriti-fluent", name: "Kriti L", style: "Fluent, Friendly & Natural" },
+  { id: "aisiri-customer-care", name: "Aisiri", style: "Friendly Customer Care" },
+  { id: "aisiri-warm-narration", name: "Aisiri", style: "Warm Narration" },
+  { id: "kampana-radio", name: "Kampana", style: "FM Radio Presenter" },
+  { id: "sharadhi-conversation", name: "Sharadhi", style: "Natural Conversation" },
+  { id: "vallabhi-friend", name: "Vallabhi S", style: "Warm & Natural Friend" },
+  { id: "deepika-ad", name: "Deepika", style: "Warm, Cheerful Ad" },
+  { id: "krishna-priya-news", name: "Krishna Priya M", style: "Confident News Anchor" },
 ];
+
+function stopOtherAudio(current: HTMLAudioElement) {
+  document
+    .querySelectorAll<HTMLAudioElement>("audio.voice-audio")
+    .forEach((el) => {
+      if (el !== current) {
+        el.pause();
+      }
+    });
+}
 
 function VoiceGallery() {
   return (
@@ -42,9 +48,8 @@ function VoiceGallery() {
       <h2>Premium Voice Gallery</h2>
       <p className="gallery-note">
         Your agent ships with free voices today. With an ElevenLabs paid
-        subscription, these premium Kannada (and 20+ more languages) voices
-        unlock instantly — no code changes, one config line. Press play to
-        hear each voice right here.
+        subscription, these premium Kannada voices unlock instantly — no code
+        changes, one config line. Press play to hear each voice right here.
       </p>
       <div className="voice-grid">
         {PREMIUM_VOICES.map((v) => (
@@ -57,15 +62,28 @@ function VoiceGallery() {
               controls
               preload="none"
               src={`/voices/${v.id}.mp3`}
+              onPlay={(e) => stopOtherAudio(e.currentTarget)}
             />
           </div>
         ))}
-        <div className="voice-card more">
-          <span className="voice-name">Many more…</span>
+      </div>
+      <div className="gallery-footer">
+        <div className="clone-note">
+          <span className="voice-name">Want a voice of your own?</span>
           <span className="voice-style">
-            10,000+ community voices in 32 languages
+            Any voice can be cloned with an ElevenLabs paid plan — a brand
+            voice, a custom persona, even your own recording — and used in
+            this agent.
           </span>
         </div>
+        <a
+          className="cta small"
+          href="https://elevenlabs.io/app/voice-library"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Many more voices →
+        </a>
       </div>
     </section>
   );
