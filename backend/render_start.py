@@ -6,6 +6,16 @@ in the main thread alongside it.
 """
 
 import os
+
+# Memory-constrained hosting (Render free tier: 512 MB). These must be set
+# before the heavy imports below:
+# - MALLOC_ARENA_MAX=2: glibc allocates per-thread arenas by default, which
+#   inflates RSS on multi-threaded Python; capping it saves tens of MB.
+# - OMP_NUM_THREADS=1: onnxruntime (Silero VAD) spawns per-core thread pools;
+#   one tiny CPU + fewer threads = fewer stacks and less allocator churn.
+os.environ.setdefault("MALLOC_ARENA_MAX", "2")
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 import sys
 import threading
 
