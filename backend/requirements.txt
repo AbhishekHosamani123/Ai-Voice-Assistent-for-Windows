@@ -1,5 +1,11 @@
 # pip mirror of pyproject.toml — for users who prefer pip over uv
-livekit-agents[groq,elevenlabs,silero]~=1.8
+# NOTE: only plugins actually needed at runtime are installed. Every LiveKit
+# process preloads all installed plugins, so unused ones (elevenlabs, openai)
+# are excluded to keep the memory footprint small on 512 MB free-tier hosts.
+# Re-add livekit-plugins-elevenlabs / livekit-plugins-openai if you switch
+# TTS_PROVIDER to "elevenlabs" or "groq".
+livekit-agents[silero]~=1.8
+livekit-plugins-groq~=1.8
 livekit-api~=1.0
 python-dotenv>=1.0
 fastapi>=0.115
