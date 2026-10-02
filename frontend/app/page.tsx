@@ -21,6 +21,78 @@ type TokenResponse = {
   identity: string;
 };
 
+// ── Your personal links ──────────────────────────────────────────────
+// Replace the placeholder "#" values with your real URLs before sharing.
+const LINKS = {
+  portfolio: "#", // e.g. "https://abhishek.dev"
+  linkedin: "#", // e.g. "https://linkedin.com/in/abhishek-hosamani"
+  instagram: "#", // e.g. "https://instagram.com/yourhandle"
+  whatsapp: "#", // e.g. "https://wa.me/919876543210"
+};
+
+const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
+  {
+    label: "Portfolio",
+    href: LINKS.portfolio,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3" y="7" width="18" height="13" rx="2" />
+        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <path d="M3 12h18" />
+      </svg>
+    ),
+  },
+  {
+    label: "LinkedIn",
+    href: LINKS.linkedin,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Instagram",
+    href: LINKS.instagram,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    label: "WhatsApp",
+    href: LINKS.whatsapp,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2a9.9 9.9 0 0 0-8.5 15.02L2 22l5.12-1.5A9.94 9.94 0 1 0 12.04 2zm0 1.8a8.1 8.1 0 1 1-4.1 15.1l-.3-.17-3.03.89.9-2.95-.2-.31a8.1 8.1 0 0 1 6.73-12.56zm-3.1 4.06c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.23.9 2.42 1.03 2.59.12.16 1.75 2.8 4.36 3.81 2.14.83 2.58.67 3.05.63.46-.04 1.5-.61 1.71-1.2.21-.6.21-1.11.15-1.21-.06-.11-.23-.17-.48-.29-.25-.13-1.5-.74-1.73-.83-.23-.08-.4-.12-.56.13-.17.25-.65.83-.8 1-.14.16-.29.19-.54.06-.25-.12-1.06-.39-2.02-1.25-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.39.11-.51.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.09-.16.04-.31-.02-.44-.06-.12-.56-1.37-.77-1.87-.2-.49-.4-.42-.56-.43h-.48z" />
+      </svg>
+    ),
+  },
+];
+
+function SocialRow() {
+  return (
+    <div className="social-row">
+      {SOCIALS.map((s) => (
+        <a
+          key={s.label}
+          className="social-btn"
+          href={s.href}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={s.label}
+          title={s.label}
+        >
+          {s.icon}
+        </a>
+      ))}
+    </div>
+  );
+}
+
 const PREMIUM_VOICES: { id: string; name: string; style: string }[] = [
   { id: "kriti-fluent", name: "Kriti L", style: "Fluent, Friendly & Natural" },
   { id: "aisiri-customer-care", name: "Aisiri", style: "Friendly Customer Care" },
@@ -156,6 +228,7 @@ export default function Home() {
           <a className="ghost nav-btn" href="#voice-gallery">
             ▶ Hear voice samples
           </a>
+          <SocialRow />
           {error && <p className="error">{error}</p>}
           <p className="note">
             Requires the backend agent worker and token server to be running.
@@ -163,6 +236,21 @@ export default function Home() {
           </p>
         </main>
         <VoiceGallery />
+        <section className="see-work" id="my-work">
+          <h2>See my work</h2>
+          <p>
+            I design and build real-time AI products — voice agents, chat
+            systems, and full-stack web apps. This agent is one of my
+            projects; the rest are on my portfolio.
+          </p>
+          <a className="cta small" href={LINKS.portfolio} target="_blank" rel="noreferrer">
+            View my portfolio →
+          </a>
+        </section>
+        <footer className="site-footer">
+          <span>Built by Abhishek — AI Voice Agent · Runamarga demo</span>
+          <SocialRow />
+        </footer>
       </>
     );
   }
