@@ -7,9 +7,13 @@ import {
 
 // Server-side token issuer. Secrets live in environment variables:
 //   LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET
-// LiveKit agent dispatch name. Changed to runamarga-voice-agent so old Render
-// instances (registered as 'voice-agent') will not intercept calls from this frontend.
-const AGENT_NAME = process.env.AGENT_NAME ?? "runamarga-voice-agent";
+// LiveKit agent dispatch name. Specifically avoids 'voice-agent' so old Render
+// free-tier containers will not intercept and crash rooms from this frontend.
+const AGENT_NAME =
+  process.env.AGENT_NAME && process.env.AGENT_NAME !== "voice-agent"
+    ? process.env.AGENT_NAME
+    : "runamarga-voice-agent";
+
 
 
 // Optional worker wake-up for cloud hosts that sleep (e.g. Render free tier).
