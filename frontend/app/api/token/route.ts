@@ -10,15 +10,16 @@ import {
 // Locally: frontend/.env.local; on Vercel: Project Settings -> Environment Variables.
 const AGENT_NAME = process.env.AGENT_NAME ?? "voice-agent";
 
-// Free-tier Render services sleep after 15 idle minutes. Ping the worker
-// (fire-and-forget) whenever someone clicks "Start conversation" so it wakes
-// immediately and the agent can join the room.
-const WAKE_URL =
-  process.env.RENDER_WAKE_URL ?? "https://runamarga-voice-agent.onrender.com";
+// Optional worker wake-up for cloud hosts that sleep (e.g. Render free tier).
+// When running the backend locally on your PC, leave RENDER_WAKE_URL unset.
+const WAKE_URL = process.env.RENDER_WAKE_URL;
 
 function wakeWorker() {
-  fetch(WAKE_URL, { signal: AbortSignal.timeout(8000) }).catch(() => {});
+  if (WAKE_URL) {
+    fetch(WAKE_URL, { signal: AbortSignal.timeout(5000) }).catch(() => {});
+  }
 }
+
 
 export async function POST() {
   wakeWorker();

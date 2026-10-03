@@ -57,19 +57,21 @@ class Assistant(Agent):
         super().__init__(instructions=system_prompt)
 
 
+# Agent server configuration:
+# When running locally on PC, memory is ample so job_memory_limit_mb defaults to None
+# and num_idle_processes defaults to 1 for instant response times.
+# Can be overridden via JOB_MEMORY_LIMIT_MB / NUM_IDLE_PROCESSES if hosted in low-memory containers.
+_mem_env = os.getenv("JOB_MEMORY_LIMIT_MB")
+_job_mem_limit = int(_mem_env) if _mem_env and _mem_env.isdigit() and int(_mem_env) > 0 else None
+_idle_procs = int(os.getenv("NUM_IDLE_PROCESSES", "1"))
+_load_thresh = float(os.getenv("LOAD_THRESHOLD", "0.95"))
+
 server = AgentServer(
-    # Memory-constrained hosting (e.g. Render free tier, 512 MB):
-    # - no pre-spawned idle plugin processes (each imports every plugin and
-    #   roughly doubles baseline memory; jobs spawn on demand instead)
-    # - cap each session's job process so a runaway session shuts down that
-    #   job gracefully instead of OOM-killing the whole instance
-    num_idle_processes=0,
-    job_memory_limit_mb=380,
-    # Tiny free-tier CPUs spike past the default 0.7 load threshold while
-    # spawning a session process, which makes the worker briefly refuse new
-    # sessions. Keep it available except under genuinely sustained load.
-    load_threshold=0.95,
+    num_idle_processes=_idle_procs,
+    job_memory_limit_mb=_job_mem_limit,
+    load_threshold=_load_thresh,
 )
+
 
 
 @server.rtc_session(agent_name=os.getenv("AGENT_NAME", "voice-agent"))

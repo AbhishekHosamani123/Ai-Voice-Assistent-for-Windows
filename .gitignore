@@ -32,4 +32,6 @@ Thumbs.db
 # Test artifacts / personal audio samples
 backend/test-output/
 voice_previews/
+Voices/
 backend/*.mp3
+

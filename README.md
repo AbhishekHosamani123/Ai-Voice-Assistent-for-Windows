@@ -6,19 +6,47 @@ Low-latency, natural-sounding conversational voice agent.
 
 Built on **LiveKit Agents 1.8** (`AgentServer` / `AgentSession`). Streaming and barge-in are native: LLM tokens stream into ElevenLabs as they arrive (no waiting for the full response), and user speech immediately interrupts playout and cancels remaining generation.
 
+## Hybrid Deployment: Vercel Frontend + Local PC Backend
+
+If you deployed the frontend on **Vercel** and attempted to host the backend on **Render (Free Tier)**, you likely encountered **Memory Limit Exceeded (OOM 512 MB)** errors. Running Silero VAD, ONNX Runtime, and audio streaming pipelines in a 512 MB container inevitably hits Render's hard limit.
+
+### Why running the backend on your PC solves this:
+1. **Zero Memory Constraints:** Your PC has ample RAM (8GB/16GB/32GB+), eliminating OOM crashes completely.
+2. **No Cold Starts or Sleeping:** Free cloud instances shut down after 15 minutes of inactivity; your local machine responds instantly.
+3. **No Port-Forwarding or Tunnels Needed:** LiveKit Agents work via an **outbound** WebSocket connection to LiveKit Cloud (`wss://...`). You do not need ngrok, Cloudflare tunnels, or router port configuration.
+4. **Seamless Connection:**
+   - User visits your Vercel frontend and clicks **"Start conversation"**.
+   - Vercel Next.js API generates a LiveKit room token requesting `voice-agent`.
+   - LiveKit Cloud automatically dispatches the room session to your local PC worker.
+   - Your PC powers the speech-to-text, LLM generation, and voice synthesis in real time!
+
+### Quick Start: Power your Vercel Frontend from your PC
+Double-click `run-local-backend.bat` in the project root, or run:
+```powershell
+cd backend
+uv run agent.py dev
+```
+As soon as you see `registered worker {"agent_name": "voice-agent", ...}`, your local PC is actively powering your Vercel frontend!
+
+---
+
 ## Architecture
 
 ```mermaid
-flowchart LR
-    A["User microphone"] --> B["LiveKit WebRTC room"]
-    B --> C["Silero VAD + turn detection"]
-    C --> D["Groq Whisper STT"]
-    D --> E["Groq LLM (streaming tokens)"]
-    E --> F["ElevenLabs TTS (streaming websocket)"]
-    F --> G["LiveKit audio playback"]
-    G --> H["User"]
-    E -. "barge-in: user speech cancels generation + playout" .-> C
+flowchart TD
+    subgraph Cloud
+        Vercel["Frontend on Vercel\n(Next.js Web UI + Token Issuer)"]
+        LK["LiveKit Cloud\n(WebRTC Audio SFU)"]
+    end
+    subgraph LocalPC["Your Local PC"]
+        Worker["Agent Worker (agent.py)\nSilero VAD + Groq LLM/STT + TTS"]
+    end
+    Browser["User Browser"] -->|HTTP /api/token| Vercel
+    Browser -->|WebRTC Audio Track| LK
+    Worker -->|Outbound WebSocket\nRoom Dispatch| LK
+    LK <-->|Bi-directional Audio| Worker
 ```
+
 
 ```text
 backend/
