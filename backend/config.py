@@ -78,7 +78,8 @@ def get_config() -> Config:
         livekit_url=_env("LIVEKIT_URL"),
         livekit_api_key=_env("LIVEKIT_API_KEY"),
         livekit_api_secret=_env("LIVEKIT_API_SECRET"),
-        agent_name=_env("AGENT_NAME", "voice-agent"),
+        agent_name=_env("AGENT_NAME", "runamarga-voice-agent"),
+
         llm_temperature=float(_env("LLM_TEMPERATURE", "0.7")),
         llm_max_tokens=int(_env("LLM_MAX_TOKENS", "256")),
         token_server_port=int(_env("TOKEN_SERVER_PORT", "8000")),

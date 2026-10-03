@@ -7,8 +7,10 @@ import {
 
 // Server-side token issuer. Secrets live in environment variables:
 //   LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET
-// Locally: frontend/.env.local; on Vercel: Project Settings -> Environment Variables.
-const AGENT_NAME = process.env.AGENT_NAME ?? "voice-agent";
+// LiveKit agent dispatch name. Changed to runamarga-voice-agent so old Render
+// instances (registered as 'voice-agent') will not intercept calls from this frontend.
+const AGENT_NAME = process.env.AGENT_NAME ?? "runamarga-voice-agent";
+
 
 // Optional worker wake-up for cloud hosts that sleep (e.g. Render free tier).
 // When running the backend locally on your PC, leave RENDER_WAKE_URL unset.

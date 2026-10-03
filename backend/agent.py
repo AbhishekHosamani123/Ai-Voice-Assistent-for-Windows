@@ -74,7 +74,8 @@ server = AgentServer(
 
 
 
-@server.rtc_session(agent_name=os.getenv("AGENT_NAME", "voice-agent"))
+@server.rtc_session(agent_name=os.getenv("AGENT_NAME", "runamarga-voice-agent"))
+
 async def entrypoint(ctx: JobContext):
     try:
         config = get_config()
